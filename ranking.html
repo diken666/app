@@ -2,9 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="referrer" content="never">
+    <title>热门视频排行榜</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/search.css">
 </head>
 <body>
-<p></p>
+<header class="header">
+    <div class="h-top">
+        <div class="h-menu">这是头部导航栏</div>
+    </div>
+</header>
+<ul class="rank-menu">
+    <li class="active"><i class="rank-icon all"></i><span class="rank-text">全站榜</span></li>
+    <li><i class="rank-icon origin"></i><span class="rank-text">原创榜</span></li>
+    <li><i class="rank-icon gangumi"></i><span class="rank-text">新番榜</span></li>
+    <li><i class="rank-icon cinema"></i><span class="rank-text">影视榜</span></li>
+    <li><i class="rank-icon rookie"></i><span class="rank-text">新人榜</span></li>
+</ul>
+<ul class="rank-list" id="rank-list">
+    <li><img class="loading" src="img/loading.gif" alt="loading"></li>
+</ul>
+
+<button id="btn" type="button">get</button>
+<script src="js/jquery.js"></script>
+<script src="js/function.js"></script>
+<script>
+    $(document).ready(function(){
+        // $.get("./data/ranking.json",(data)=>{
+        //     console.log(data.data.list[0]);
+        //     toHtml(data);
+        // });
+        $('#btn').click(()=>{
+           $.ajax({
+               url:"https://api.bilibili.com/x/web-interface/ranking?jsonp=jsonp&rid=0&day=3&type=1&arc_type=0",
+               type:"GET",
+               dataType:"JSONP",
+               jsonp:"callback",
+               jsonpCallback:"",
+               success:function(data){
+                   console.log(JSON.stringify(data));
+               },
+               error:function(){
+                   console.log("请求出错！");
+               }
+           })
+        });
+        $(function(){
+            let li = $('.rank-menu li');
+            li.each(function(i){
+                $(this).click(function(){
+                    $(this).addClass("active").siblings().removeClass("active");
+                    showRanking(i);
+                })
+            })
+        })
+    })
+</script>
 </body>
 </html>
